@@ -10,10 +10,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Entity : MonoBehaviour
 {
-	public readonly UnityEvent OnDeath = new UnityEvent();
-	public readonly UnityEvent OnDamage = new UnityEvent();
-	public readonly UnityEvent OnFall = new UnityEvent();
-	
 	public float MaxSpeed;
 	public float MaxAcceleration;
 
@@ -43,9 +39,17 @@ public class Entity : MonoBehaviour
 	public int Hp { get; private set; }
 
 	private bool _dead = false;
-	private bool _moving = false;
+
+	private int _platforms = 0;
+	public bool HasPlatforms { get { return _platforms > 0; }}
 	
 	private Rigidbody2D _rb;
+	
+	private void Start()
+	{
+		Hp = MaxHp;
+		_rb = GetComponent<Rigidbody2D>();
+	}
 	
 	private void FixedUpdate()
 	{	
@@ -56,21 +60,29 @@ public class Entity : MonoBehaviour
 			if (_rb.velocity.magnitude < 0.1) _rb.velocity = Vector2.zero;
 		}
 	}
-	
-	private void Start()
-	{
-		Hp = MaxHp;
-		_rb = GetComponent<Rigidbody2D>();
-	}
 
-	public void Damage(int damage)
+	private void OnPlatformExit()
 	{
-		Hp -= damage;
-		OnDamage.Invoke();
-		if (Hp <= 0 && !_dead)
+		_platforms--;
+		if (_platforms <= 0)
 		{
-			OnDeath.Invoke();
-			_dead = true;
+			Debug.Log("You fell!");
 		}
 	}
+
+	private void OnPlatformEnter()
+	{
+		_platforms++;
+	}
+
+//	public void Damage(int damage)
+//	{
+//		Hp -= damage;
+//		OnDamage.Invoke();
+//		if (Hp <= 0 && !_dead)
+//		{
+//			OnDeath.Invoke();
+//			_dead = true;
+//		}
+//	}
 }
