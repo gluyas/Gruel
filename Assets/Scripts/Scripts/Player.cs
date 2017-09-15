@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {	
 	public static Player Instance { get; private set; }
 
+	public Rigidbody2D RigidBody { get; private set; }
+	
 	private Entity _ent;
 	
 	public int Hp
@@ -18,7 +20,8 @@ public class Player : MonoBehaviour
 	{
 		Instance = this;
 		_ent = GetComponent<Entity>();
-	}
+		RigidBody = GetComponent<Rigidbody2D>();
+	}	
 
 	private void Update()
 	{
