@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Entity))]
 public class Player : MonoBehaviour
-{
+{	
 	public static Player Instance { get; private set; }
 	
 	private Entity _ent;
@@ -61,8 +61,9 @@ public class Player : MonoBehaviour
 	private void Update()
 	{		
 		// MOVEMENT
-		_ent.SetMovement(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
-		
+		//_ent.Velocity = (new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+		_ent.WishMovement = new Vector2(-Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
 //		// AMMO REGEN
 //		{
 //			var regenRate = Mathf.Clamp(AmmoRaw / AmmoMax / AmmoRegenMaxPoint, 0, 1);
@@ -143,7 +144,7 @@ public class Player : MonoBehaviour
 //	
 	private void Kill()
 	{
-		_ent.SetMovement(Vector3.zero);		
+		//_ent.SetMovement(Vector3.zero);		
 		this.enabled = false;
 		GetComponent<Collider>().enabled = false;
 	}
