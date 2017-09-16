@@ -111,7 +111,8 @@ public class Swarmer : MonoBehaviour
 		
 		// NOISE
 		var sign = Random.value > 0.5 ? -1 : 1;
-		var noiseDelta = Quaternion.AngleAxis(sign * Random.Range(NoiseDeltaMin, NoiseDeltaMax), Vector3.forward);
+		var noiseDelta = Quaternion.AngleAxis(
+			sign * Random.Range(NoiseDeltaMin, NoiseDeltaMax) * Time.deltaTime, Vector3.forward);
 		_noise = noiseDelta * _noise;
 		          
 		// FINAL CALCULATION
