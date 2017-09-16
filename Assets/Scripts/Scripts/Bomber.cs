@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Bomber : MonoBehaviour
 {
-	public float BombRadius;
-	public float BombMaxForce;
-	public float BombExponent;
+	public GameObject Bomb;
 	
-	void Update () {
+	private void Update () {
 		if (Input.GetMouseButtonDown(0))
 		{
 			var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -18,12 +16,8 @@ public class Bomber : MonoBehaviour
 			if (playerPlane.Raycast(mouseRay, out toPlane))
 			{
 				var targetPos = mouseRay.GetPoint(toPlane);
-				var toPlayer = Player.Instance.RigidBody.position - new Vector2(targetPos.x, targetPos.y);
-				if (toPlayer.magnitude <= BombRadius)
-				{
-					var force = BombMaxForce * Mathf.Pow(1 - toPlayer.magnitude / BombRadius, BombExponent);
-					Player.Instance.RigidBody.AddForce(toPlayer.normalized * force, ForceMode2D.Impulse);
-				}
+				var bomb = Instantiate(Bomb);
+				bomb.transform.position = targetPos;
 			}
 		}
 	}
