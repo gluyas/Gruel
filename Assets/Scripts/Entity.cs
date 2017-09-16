@@ -18,6 +18,7 @@ public class Entity : MonoBehaviour
 	public float MaxAcceleration;
 
 	public bool AutoFacing = true;
+	public bool DestroyOnDeath = false;
 
 	private Vector2 _wishMovement;
 	public Vector2 WishMovement
@@ -57,6 +58,10 @@ public class Entity : MonoBehaviour
 	{
 		Hp = MaxHp;
 		_rb = GetComponent<Rigidbody2D>();
+		OnDamage.AddListener(() =>
+		{
+			if (DestroyOnDeath) Destroy(this.gameObject);
+		});
 	}
 	
 	private void FixedUpdate()

@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
 	public Rigidbody2D RigidBody { get; private set; }	
 	public Entity Entity { get; private set; }
 
+	public GameObject Bullet;
+	public float FireRateAuto;
+	private float _nextAuto;
+	
 	private Animator[] _animators;
 	private bool _walking;
 	
@@ -51,7 +55,8 @@ public class Player : MonoBehaviour
 			}
 			_walking = false;
 		}
-
+		
+		// AIM
 		var aim = new Vector2(-Input.GetAxis("AimX"), Input.GetAxis("AimY"));
 		if (aim.magnitude > 0.1)
 		{
@@ -68,5 +73,17 @@ public class Player : MonoBehaviour
 //		{
 //			animator.speed = animationDirection;
 //		}
+		
+		// SHOOTING
+		if (Input.GetButton("Fire1"))
+		{
+			_nextAuto -= Time.deltaTime;
+			if (_nextAuto <= 0 || Input.GetButtonDown("Fire1"))
+			{
+				var bullet = Instantiate(Bullet).GetComponent<Bullet>();
+				bullet.Init(RigidBody.position, Entity.Facing, this.Entity);
+				_nextAuto = 1 / FireRateAuto;
+			}
+		}
 	}
 }
