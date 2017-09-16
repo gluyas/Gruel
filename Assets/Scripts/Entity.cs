@@ -8,6 +8,7 @@ using UnityEngine.Events;
 /// Provides a simpler movement model than Unity's physics engine.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class Entity : MonoBehaviour
 {
 	public float MaxSpeed;
