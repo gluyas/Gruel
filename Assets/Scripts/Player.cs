@@ -26,12 +26,14 @@ public class Player : MonoBehaviour
 	private void Start()
 	{
 		Entity = GetComponent<Entity>();
+		
 		RigidBody = GetComponent<Rigidbody2D>();
 		_animators = GetComponentsInChildren<Animator>();
 	}	
 
 	private void FixedUpdate()
 	{
+		// MOVEMENT
 		Entity.WishMovement = new Vector2(-Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 		if (Entity.Velocity.magnitude > 0.2 && !_walking)
 		{
@@ -49,5 +51,22 @@ public class Player : MonoBehaviour
 			}
 			_walking = false;
 		}
+
+		var aim = new Vector2(-Input.GetAxis("AimX"), Input.GetAxis("AimY"));
+		if (aim.magnitude > 0.1)
+		{
+			Entity.AutoFacing = false;
+			Entity.Facing = aim;
+		}
+		else
+		{
+			Entity.AutoFacing = true;
+		}
+
+//		var animationDirection = Mathf.Sign(Vector2.Dot(Entity.WishMovement, Entity.Facing));
+//		foreach (var animator in _animators)
+//		{
+//			animator.speed = animationDirection;
+//		}
 	}
 }

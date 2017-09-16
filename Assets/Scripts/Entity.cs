@@ -11,8 +11,13 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class Entity : MonoBehaviour
 {
+	public readonly UnityEvent OnDamage = new UnityEvent(); 
+	public readonly UnityEvent OnDeath = new UnityEvent(); 
+	
 	public float MaxSpeed;
 	public float MaxAcceleration;
+
+	public bool AutoFacing = true;
 
 	private Vector2 _wishMovement;
 	public Vector2 WishMovement
@@ -35,6 +40,8 @@ public class Entity : MonoBehaviour
 	{
 		get { return _rb.velocity; }
 	}
+
+	public Vector2 Facing { get; set; }
 
 	public int MaxHp;
 	public int Hp { get; private set; }
@@ -61,11 +68,12 @@ public class Entity : MonoBehaviour
 			if (_rb.velocity.magnitude < 0.1) _rb.velocity = Vector2.zero;
 		}
 
-		if (WishVelocity.magnitude > 0.1)
+		if (AutoFacing)
 		{
-			var sign = Mathf.Sign(Vector3.Cross(Vector2.down, WishMovement).z);
-			_rb.rotation = sign * Vector2.Angle(Vector2.down, WishVelocity);
+			if (WishMovement.magnitude > 0.1) Facing = WishMovement;
 		}
+		var sign = Mathf.Sign(Vector3.Cross(Vector2.down, Facing).z);
+		_rb.rotation = sign * Vector2.Angle(Vector2.down, Facing);
 	}
 
 	private void OnPlatformExit()
@@ -82,14 +90,14 @@ public class Entity : MonoBehaviour
 		_platforms++;
 	}
 
-//	public void Damage(int damage)
-//	{
-//		Hp -= damage;
-//		OnDamage.Invoke();
-//		if (Hp <= 0 && !_dead)
-//		{
-//			OnDeath.Invoke();
-//			_dead = true;
-//		}
-//	}
+	public void Damage(int damage)
+	{
+		Hp -= damage;
+		OnDamage.Invoke();
+		if (Hp <= 0 && !_dead)
+		{
+			OnDeath.Invoke();
+			_dead = true;
+		}
+	}
 }
