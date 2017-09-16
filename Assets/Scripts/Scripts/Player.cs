@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
 
 	public Rigidbody2D RigidBody { get; private set; }	
 	public Entity Entity { get; private set; }
+
+	private Animator[] _animators;
+	private bool _walking;
 	
 	public int Hp
 	{
@@ -24,12 +27,27 @@ public class Player : MonoBehaviour
 	{
 		Entity = GetComponent<Entity>();
 		RigidBody = GetComponent<Rigidbody2D>();
+		_animators = GetComponentsInChildren<Animator>();
 	}	
 
-	private void Update()
+	private void FixedUpdate()
 	{
-		// MOVEMENT
-		//_ent.Velocity = (new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
 		Entity.WishMovement = new Vector2(-Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+		if (Entity.Velocity.magnitude > 0.2 && !_walking)
+		{
+			foreach (var animator in _animators)
+			{
+				animator.SetTrigger("walk");
+			}
+			_walking = true;
+		} 
+		else if (Entity.Velocity.magnitude <= 0.2 &&_walking)
+		{
+			foreach (var animator in _animators)
+			{
+				animator.SetTrigger("idle");
+			}
+			_walking = false;
+		}
 	}
 }

@@ -59,6 +59,12 @@ public class Entity : MonoBehaviour
 			_rb.AddForce((WishMovement - Movement).normalized * force);
 			if (_rb.velocity.magnitude < 0.1) _rb.velocity = Vector2.zero;
 		}
+
+		if (WishVelocity.magnitude > 0.1)
+		{
+			var sign = Mathf.Sign(Vector3.Cross(Vector2.down, WishMovement).z);
+			_rb.rotation = sign * Vector2.Angle(Vector2.down, WishVelocity);
+		}
 	}
 
 	private void OnPlatformExit()
