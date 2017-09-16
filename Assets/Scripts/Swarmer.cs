@@ -7,6 +7,8 @@ using UnityEngine;
 public class Swarmer : MonoBehaviour
 {
 	public static readonly HashSet<Swarmer> All = new HashSet<Swarmer>();
+
+	public float AnimationSpeed;
 	
 	// AI property weighting
 	public float SwarmRadius;
@@ -33,9 +35,11 @@ public class Swarmer : MonoBehaviour
 	
 	private Entity _entity;
 	private Rigidbody2D _rb;
+	private Animator _animator;
 	
 	private void OnEnable()
 	{
+		_animator = GetComponentInChildren<Animator>();
 		_entity = GetComponent<Entity>();
 		_rb = GetComponent<Rigidbody2D>();
 		_noise = Random.insideUnitCircle;
@@ -119,6 +123,8 @@ public class Swarmer : MonoBehaviour
 		var result = CohesionWeight * cohesion + AlignmentWeight * alignment + AvoidanceWeight * avoidance +
 		             PursuitWeight * pursuit + NoiseWeight * _noise;
 		_entity.WishMovement = result.normalized;
+
+		_animator.speed = _entity.Movement.magnitude * AnimationSpeed;
 	}
 
 	private void OnDestroy()
