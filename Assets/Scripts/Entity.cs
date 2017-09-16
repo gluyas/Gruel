@@ -20,6 +20,17 @@ public class Entity : MonoBehaviour
 	public bool AutoFacing = true;
 	public bool DestroyOnDeath = false;
 
+	private bool _flying;
+	public bool Flying
+	{
+		get { return _flying; }
+		set
+		{
+			_flying = false;
+			CheckFall();
+		}
+	}
+
 	private Vector2 _wishMovement;
 	public Vector2 WishMovement
 	{
@@ -58,7 +69,7 @@ public class Entity : MonoBehaviour
 	{
 		Hp = MaxHp;
 		_rb = GetComponent<Rigidbody2D>();
-		OnDamage.AddListener(() =>
+		OnDeath.AddListener(() =>
 		{
 			if (DestroyOnDeath) Destroy(this.gameObject);
 		});
@@ -84,12 +95,29 @@ public class Entity : MonoBehaviour
 	private void OnPlatformExit()
 	{
 		_platforms--;
-		if (_platforms <= 0)
+		CheckFall();
+	}
+	
+	private void CheckFall()
+	{
+		if (!HasPlatforms && !Flying)
 		{
-			Debug.Log("You fell!");
+			var newBody = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			newBody.GetComponent<Renderer>().enabled = false;
+			var newRb = newBody.AddComponent<Rigidbody>();
+		
+			newBody.transform.position = this.transform.position;
+			newRb.velocity = this._rb.velocity;
+
+			for (var i = transform.childCount-1; i >= 0 ; i--)
+			{
+				Debug.Log(i);
+				transform.GetChild(i).SetParent(newBody.transform);
+			}
+			OnDeath.Invoke();
 		}
 	}
-
+	
 	private void OnPlatformEnter()
 	{
 		_platforms++;

@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
 		RigidBody = GetComponent<Rigidbody2D>();
 		_animators = GetComponentsInChildren<Animator>();
 	}	
-
+	
 	private void FixedUpdate()
 	{
 		// MOVEMENT
