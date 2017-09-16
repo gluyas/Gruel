@@ -14,11 +14,11 @@ public class Platform : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D other)
 	{
-		other.SendMessage("OnPlatformEnter");
+		other.SendMessage("OnPlatformEnter", SendMessageOptions.DontRequireReceiver);
 	}
 
 	private void OnTriggerExit2D(Collider2D other)
 	{
-		other.SendMessage("OnPlatformExit");
+		other.SendMessage("OnPlatformExit", SendMessageOptions.DontRequireReceiver);
 	}
 }
