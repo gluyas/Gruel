@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 	public Entity Entity { get; private set; }
 
 	public GameObject Bullet;
+	public float FireScreenShake = 0.5f;
 	public float FireRateAuto;
 	private float _nextAuto;
 	
@@ -83,6 +84,7 @@ public class Player : MonoBehaviour
 				var bullet = Instantiate(Bullet).GetComponent<Bullet>();
 				bullet.Init(RigidBody.position, Entity.Facing, this.Entity);
 				_nextAuto = 1 / FireRateAuto;
+				GameCamera.AddShake(FireScreenShake);
 			}
 		}
 	}

@@ -10,7 +10,13 @@ public class Bomb : MonoBehaviour
 	public float ExplosionMaxForce;
 	public float ExplosionExponent;
 	
+	public float ScreenShakeStrength;
+	public float ScreenShakeRadius;
+	public float ScreenShakeExponent;
+	
 	public float RemainingTime { get; private set; }
+	
+	public Vector2 Position { get {return new Vector2(transform.position.x, transform.position.y);} }
 
 	private Collider2D _explosionTrigger;
 	
@@ -25,12 +31,20 @@ public class Bomb : MonoBehaviour
 		_explosionTrigger = explosionTrigger;
 	}
 
+	private float ExplosionStrength(Vector2 pos, float radius, float exponent)
+	{
+		var distance = (pos - Position).magnitude;
+		if (distance >= radius) return 0;
+		else return Mathf.Pow(1 - distance / radius, exponent);
+	}
+	
 	private void FixedUpdate()
 	{
 		RemainingTime -= Time.deltaTime;
 		if (RemainingTime <= 0)
 		{
 			_explosionTrigger.enabled = true;
+			GameCamera.AddShake(ScreenShakeStrength * ExplosionStrength(Player.Instance.RigidBody.position, ScreenShakeRadius, ScreenShakeExponent));
 			StartCoroutine(DestroyAfterFixedUpdate());
 		}
 	}
@@ -41,10 +55,10 @@ public class Bomb : MonoBehaviour
 		if (entity != null)
 		{
 			var rb = entity.GetComponent<Rigidbody2D>();
-			var toEntity = rb.position - new Vector2(transform.position.x, transform.position.y);
+			var toEntity = rb.position - Position;
 			if (toEntity.magnitude <= ExplosionRadius)
 			{
-				var force = ExplosionMaxForce * Mathf.Pow(1 - toEntity.magnitude / ExplosionRadius, ExplosionExponent);
+				var force = ExplosionMaxForce * ExplosionStrength(rb.position, ExplosionRadius, ExplosionExponent);
 				rb.AddForce(toEntity.normalized * force, ForceMode2D.Impulse);
 			}
 		}
