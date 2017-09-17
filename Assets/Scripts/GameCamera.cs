@@ -23,6 +23,8 @@ public class GameCamera : MonoBehaviour
 
 	private void Update()
 	{
+		if (Player.Instance.Entity.Dead) return;
+		
 		this.transform.position = Player.Instance.transform.position + _playerOffset;
 		var shakeDir = (Vector3) Random.insideUnitCircle;
 		this.transform.localPosition += shakeDir * _shake;

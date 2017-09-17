@@ -66,7 +66,7 @@ public class Entity : MonoBehaviour
 	public int MaxHp;
 	public int Hp { get; private set; }
 
-	private bool _dead = false;
+	public bool Dead { get; private set; }
 
 	private int _platforms = 0;
 	public bool HasPlatforms { get { return _platforms > 0; }}
@@ -80,6 +80,7 @@ public class Entity : MonoBehaviour
 		OnDeath.AddListener(() =>
 		{
 			if (DestroyOnDeath) Destroy(this.gameObject);
+			Dead = true;
 		});
 	}
 	
@@ -134,10 +135,10 @@ public class Entity : MonoBehaviour
 	{
 		Hp -= damage;
 		OnDamage.Invoke();
-		if (Hp <= 0 && !_dead)
+		if (Hp <= 0 && !Dead)
 		{
 			OnDeath.Invoke();
-			_dead = true;
+			Dead = true;
 		}
 	}
 }

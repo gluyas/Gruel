@@ -44,6 +44,8 @@ public class Player : MonoBehaviour
 	
 	private void FixedUpdate()
 	{
+		if (Entity.Dead) return;
+		
 		// MOVEMENT
 		Entity.WishMovement = new Vector2(-Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 		if (Entity.Velocity.magnitude > 0.2 && !_walking)
