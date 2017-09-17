@@ -20,6 +20,7 @@ public class Platform : MonoBehaviour
 		float minSqrDistance = float.MaxValue;
 		foreach (var platform in _all)
 		{
+			if (platform == null || platform._collider == null) return null; // fix load scene bug
 			if (platform._collider.OverlapPoint(pos)) return null;
 			else minSqrDistance = Mathf.Min(minSqrDistance, platform._collider.bounds.SqrDistance(pos));
 		}

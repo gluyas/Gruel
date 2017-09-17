@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameCamera : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class GameCamera : MonoBehaviour
 
 	private void Update()
 	{
+		if (Input.GetButton("Restart"))
+		{
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
+			
 		if (Player.Instance.Entity.Dead) return;
 		
 		this.transform.position = Player.Instance.transform.position + _playerOffset;
@@ -31,7 +37,6 @@ public class GameCamera : MonoBehaviour
 
 		_shake /= ShakeDecayRate;
 	}
-	
 }
 
 
