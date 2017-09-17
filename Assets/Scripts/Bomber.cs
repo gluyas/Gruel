@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Bomber : MonoBehaviour
 {
+	public GameObject[] Blessings;
 	public GameObject Bomb;
 	public float bombDelay;
 	public bool bombAvailable = true;
@@ -23,6 +24,13 @@ public class Bomber : MonoBehaviour
 				var targetPos = mouseRay.GetPoint (toPlane);
 				var bomb = Instantiate (Bomb);
 				bomb.transform.position = targetPos;
+				bomb.GetComponent<Bomb>().SetDrop(
+					Blessings[Mathf.FloorToInt(Random.Range(0, Blessings.Length))],
+					(blessing, bomba) =>
+					{
+						blessing.transform.position = bomb.transform.position;
+					}
+				);
 			}
 		} else if (Input.GetMouseButtonDown (0) && !bombAvailable) {
 			cooldown.color = new Color (1.0f, 1.0f, 0.0f);

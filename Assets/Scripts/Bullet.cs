@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
 		_rb.position = pos;
 		_rb.velocity = dir.normalized * Speed;
 		
-		if (owner != null && InheritVelocity)
+		if (owner != null && InheritVelocity && Vector2.Dot(owner.Velocity, dir) > 0)
 		{
 			_rb.velocity += owner.Velocity;
 		}
