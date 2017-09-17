@@ -23,6 +23,10 @@ public class Swarmer : MonoBehaviour
 	
 	public float PursuitWeight = 1f;
 
+	public float EdgeWeight = 1f;
+	public float EdgeDistance = 5f;
+	public float EdgeExponent = 2f;
+
 	public float NoiseWeight;
 	public float NoiseDeltaMin;
 	public float NoiseDeltaMax;
@@ -106,6 +110,12 @@ public class Swarmer : MonoBehaviour
 		var pursuit = Player.Instance.RigidBody.position - _rb.position;
 		pursuit.Normalize();		// constant accelleration towards player
 	
+		// EDGE
+		var edgeExceed = Platform.DistanceFromPlatform(_rb.position + _entity.Movement * EdgeDistance)?? 0;
+		Debug.Log(edgeExceed);
+		var edge = -_entity.Movement.normalized * edgeExceed / EdgeDistance;
+		if (_entity.Velocity.magnitude < 0.5) edge = Vector2.zero;
+		
 		// EDGE CASES
 		if (swarmCount == 0)
 		{
@@ -121,7 +131,7 @@ public class Swarmer : MonoBehaviour
 		          
 		// FINAL CALCULATION
 		var result = CohesionWeight * cohesion + AlignmentWeight * alignment + AvoidanceWeight * avoidance +
-		             PursuitWeight * pursuit + NoiseWeight * _noise;
+		             PursuitWeight * pursuit + NoiseWeight * _noise + EdgeWeight * edge;
 		_entity.WishMovement = result.normalized;
 
 		_animator.speed = _entity.Movement.magnitude * AnimationSpeed;
