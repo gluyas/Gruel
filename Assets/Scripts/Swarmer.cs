@@ -45,6 +45,7 @@ public class Swarmer : MonoBehaviour
 	{
 		_animator = GetComponentInChildren<Animator>();
 		_entity = GetComponent<Entity>();
+		Debug.Log (_entity);
 		_rb = GetComponent<Rigidbody2D>();
 		_noise = Random.insideUnitCircle;
 		//_entity.OnDeath.AddListener(() => Destroy(gameObject));
