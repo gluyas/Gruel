@@ -11,6 +11,14 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class Entity : MonoBehaviour
 {
+	public AudioClip[] WalkSounds;
+
+	public AudioClip[] HurtSounds;
+
+	public AudioClip[] DeathSounds;
+
+	public AudioClip[] SpawnSounds;
+
 	public readonly UnityEvent OnDamage = new UnityEvent(); 
 	public readonly UnityEvent OnDeath = new UnityEvent(); 
 	
