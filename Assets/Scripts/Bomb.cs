@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bomb : MonoBehaviour
 {
+	public AudioClip[] ExplosionSounds;
+
 	public float ExplosionDelay;
 	public float ExplosionRadius;
 	public float ExplosionMaxForce;

@@ -5,7 +5,13 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Entity))]
 public class Player : MonoBehaviour
 {	
+
+	public AudioClip[] IdleSound;
+	public AudioClip[] VocalsIdleSound;
+	public AudioClip[] ShootingSoftSounds;
+	public AudioClip[] ShootingSounds;
 	public static Player Instance { get; private set; }
+
 
 	public Rigidbody2D RigidBody { get; private set; }	
 	public Entity Entity { get; private set; }
