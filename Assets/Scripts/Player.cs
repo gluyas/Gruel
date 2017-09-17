@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 	public AudioClip[] ShootingSounds;
 	public static Player Instance { get; private set; }
 
+	public AudioSource Audio;
 
 	public Rigidbody2D RigidBody { get; private set; }	
 	public Entity Entity { get; private set; }
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
 		
 		RigidBody = GetComponent<Rigidbody2D>();
 		_animators = GetComponentsInChildren<Animator>();
+		Audio = GetComponent<AudioSource>();
 	}	
 	
 	private void FixedUpdate()
@@ -89,11 +91,16 @@ public class Player : MonoBehaviour
 			_nextAuto -= Time.deltaTime;
 			if (_nextAuto <= 0 || Input.GetButtonDown("Fire1"))
 			{
+				Audio.pitch = Random.Range(0.3f, 1.2f);
+				Audio.PlayOneShot(ShootingSoftSounds.RandomElement(), 0.4f);
 				var bullet = Instantiate(Bullet).GetComponent<Bullet>();
 				bullet.Init(RigidBody.position, Entity.Facing, this.Entity);
 				_nextAuto = 1 / FireRateAuto;
 				GameCamera.AddShake(FireScreenShake);
 			}
 		}
+		
 	}
+
+	
 }

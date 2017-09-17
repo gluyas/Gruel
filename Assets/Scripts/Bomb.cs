@@ -35,6 +35,8 @@ public class Bomb : MonoBehaviour
 		_drop = drop;
 		_dropMethod = instantiateMethod;
 	}
+
+	private AudioSource _audio;
 	
 	private void Awake()
 	{
@@ -45,6 +47,7 @@ public class Bomb : MonoBehaviour
 		explosionTrigger.radius = ExplosionRadius;
 		explosionTrigger.isTrigger = true;
 		_explosionTrigger = explosionTrigger;
+		_audio = GetComponent<AudioSource>();
 	}
 
 	private float ExplosionStrength(Vector2 pos, float radius, float exponent)
@@ -60,9 +63,14 @@ public class Bomb : MonoBehaviour
 		if (RemainingTime <= 0)
 		{
 			var expParts = Instantiate (parts);
-			expParts.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+0.45f);
+			expParts.transform.position = 
+				new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+0.45f);
 			_explosionTrigger.enabled = true;
-			GameCamera.AddShake(ScreenShakeStrength * ExplosionStrength(Player.Instance.RigidBody.position, ScreenShakeRadius, ScreenShakeExponent));
+			GameCamera.AddShake(ScreenShakeStrength * 
+			                    ExplosionStrength(Player.Instance.RigidBody.position, 
+				                    ScreenShakeRadius, ScreenShakeExponent));
+			Debug.Log(_audio);
+			_audio.PlayOneShot(ExplosionSounds.RandomElement());
 			StartCoroutine(DestroyAfterFixedUpdate());
 		}
 	}

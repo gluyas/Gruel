@@ -21,6 +21,7 @@ public abstract class Blessing : MonoBehaviour
 		var player = other.GetComponent<Player>();
 		if (player != null) {
 			OnApply(player);
+			player.Audio.PlayOneShot(player.VocalsIdleSound.RandomElement());
 			player.StartCoroutine(ExpireEffect(player, this));
 			Destroy(this.gameObject);
 		}

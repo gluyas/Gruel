@@ -9,6 +9,7 @@ using UnityEngine.Events;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(AudioSource))]
 public class Entity : MonoBehaviour
 {
 	public AudioClip[] WalkSounds;
@@ -72,16 +73,21 @@ public class Entity : MonoBehaviour
 	public bool HasPlatforms { get { return _platforms > 0; }}
 	
 	private Rigidbody2D _rb;
+
+	private AudioSource _audio;
 	
 	private void Start()
 	{
 		Hp = MaxHp;
 		_rb = GetComponent<Rigidbody2D>();
+		_audio = GetComponent<AudioSource>();
 		OnDeath.AddListener(() =>
 		{
 			if (DestroyOnDeath) Destroy(this.gameObject);
+			_audio.PlayOneShot(DeathSounds.RandomElement());
 			Dead = true;
 		});
+		//OnDamage.AddListener();
 	}
 	
 	private void FixedUpdate()
