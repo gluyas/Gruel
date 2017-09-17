@@ -111,7 +111,6 @@ public class Entity : MonoBehaviour
 
 			for (var i = transform.childCount-1; i >= 0 ; i--)
 			{
-				Debug.Log(i);
 				transform.GetChild(i).SetParent(newBody.transform);
 			}
 			OnDeath.Invoke();

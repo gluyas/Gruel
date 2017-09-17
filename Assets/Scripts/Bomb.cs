@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
@@ -19,6 +20,17 @@ public class Bomb : MonoBehaviour
 	public Vector2 Position { get {return new Vector2(transform.position.x, transform.position.y);} }
 
 	private Collider2D _explosionTrigger;
+	private GameObject _drop;
+	private InstantiateDropMethod _dropMethod;
+
+	public delegate void InstantiateDropMethod(GameObject drop, Bomb bomb);
+	
+	
+	public void SetDrop(GameObject drop, InstantiateDropMethod instantiateMethod = null )
+	{
+		_drop = drop;
+		_dropMethod = instantiateMethod;
+	}
 	
 	private void Awake()
 	{
@@ -67,6 +79,11 @@ public class Bomb : MonoBehaviour
 	private IEnumerator DestroyAfterFixedUpdate()
 	{
 		yield return new WaitForFixedUpdate();
+		if (_drop != null)
+		{
+			var drop = Instantiate(_drop);
+			if (_dropMethod != null) _dropMethod(drop, this);
+		}
 		Destroy(this.gameObject);
 	}
 }

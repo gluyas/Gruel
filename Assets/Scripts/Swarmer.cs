@@ -112,7 +112,6 @@ public class Swarmer : MonoBehaviour
 	
 		// EDGE
 		var edgeExceed = Platform.DistanceFromPlatform(_rb.position + _entity.Movement * EdgeDistance)?? 0;
-		Debug.Log(edgeExceed);
 		var edge = -_entity.Movement.normalized * edgeExceed / EdgeDistance;
 		if (_entity.Velocity.magnitude < 0.5) edge = Vector2.zero;
 		

@@ -13,7 +13,6 @@ public class GameCamera : MonoBehaviour
 
 	public static void AddShake(float shake)
 	{
-		Debug.Log(shake);
 		_shake += shake;
 	}
 	
