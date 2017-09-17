@@ -16,6 +16,8 @@ public class Bomb : MonoBehaviour
 	public float ScreenShakeStrength;
 	public float ScreenShakeRadius;
 	public float ScreenShakeExponent;
+
+	public ParticleSystem parts;
 	
 	public float RemainingTime { get; private set; }
 	
@@ -57,6 +59,8 @@ public class Bomb : MonoBehaviour
 		RemainingTime -= Time.deltaTime;
 		if (RemainingTime <= 0)
 		{
+			var expParts = Instantiate (parts);
+			expParts.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+0.45f);
 			_explosionTrigger.enabled = true;
 			GameCamera.AddShake(ScreenShakeStrength * ExplosionStrength(Player.Instance.RigidBody.position, ScreenShakeRadius, ScreenShakeExponent));
 			StartCoroutine(DestroyAfterFixedUpdate());
